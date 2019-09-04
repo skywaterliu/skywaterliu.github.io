@@ -1,1 +1,964 @@
-<!doctype html><html lang="en"><head><meta name="generator" content="Hexo 3.8.0"><meta charset="UTF-8"><meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1"><meta http-equiv="X-UA-Compatible" content="ie=edge"><link rel="shortcut icon" href="/static/favicon.ico"><title>安之一隅</title><link href="/static/css/app.c64eadfc8d3abfc9d85514dba4054813.css" rel="stylesheet"></head><body><div id="app"></div><script type="text/javascript" src="/static/js/manifest.992b63bf2abbf3194771.js"></script><script type="text/javascript" src="/static/js/vendor.e12dc8c9af1f7aa12436.js"></script><script type="text/javascript" src="/static/js/app.bc036f9167871d39aecf.js"></script></body></html>
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link rel="stylesheet" href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+
+<link rel="stylesheet" href="/css/main.css?v=7.1.2">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.1.2">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.1.2">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.1.2">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=7.1.2" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.1.2',
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false,"dimmer":false},
+    back2top: true,
+    back2top_sidebar: false,
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="排污权做登录日志时遇到的一个问题，错误代码如下： 1234567891011121314@LoginSuccessLogpublic JSONObject login(JSONObject user) &amp;#123;    /*......多余代码省略......*/    //该处有问题    SysUser sysUser = validate(loginCode, password);   /">
+<meta name="keywords" content="AOP,Spring">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Spring AOP 嵌套使用时内部方法注解失效问题">
+<meta property="og:url" content="https://skywaterliu.github.io/2018/12/03/Spring AOP 嵌套使用时内部方法注解失效问题/index.html">
+<meta property="og:site_name" content="安之一隅">
+<meta property="og:description" content="排污权做登录日志时遇到的一个问题，错误代码如下： 1234567891011121314@LoginSuccessLogpublic JSONObject login(JSONObject user) &amp;#123;    /*......多余代码省略......*/    //该处有问题    SysUser sysUser = validate(loginCode, password);   /">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-07-15T07:58:03.510Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Spring AOP 嵌套使用时内部方法注解失效问题">
+<meta name="twitter:description" content="排污权做登录日志时遇到的一个问题，错误代码如下： 1234567891011121314@LoginSuccessLogpublic JSONObject login(JSONObject user) &amp;#123;    /*......多余代码省略......*/    //该处有问题    SysUser sysUser = validate(loginCode, password);   /">
+
+
+
+
+
+  
+  
+  <link rel="canonical" href="https://skywaterliu.github.io/2018/12/03/Spring AOP 嵌套使用时内部方法注解失效问题/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>Spring AOP 嵌套使用时内部方法注解失效问题 | 安之一隅</title>
+  
+
+
+
+
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-142123857-1"></script>
+  <script>
+    var host = window.location.hostname;
+    if (host !== "localhost" || !true) {
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'UA-142123857-1');
+    }
+  </script>
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">安之一隅</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">莫听穿林打叶声，何妨吟啸且徐行。</p>
+      
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-schedule">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/calendar" rel="section"><i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br>日程表</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://skywaterliu.github.io/2018/12/03/Spring AOP 嵌套使用时内部方法注解失效问题/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="你丶一顾倾城">
+      <meta itemprop="description" content="你愿意当一根傻傻的韭菜吗">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="安之一隅">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Spring AOP 嵌套使用时内部方法注解失效问题
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-12-03 22:57:00" itemprop="dateCreated datePublished" datetime="2018-12-03T22:57:00+08:00">2018-12-03</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-07-15 15:58:03" itemprop="dateModified" datetime="2019-07-15T15:58:03+08:00">2019-07-15</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/后端/" itemprop="url" rel="index"><span itemprop="name">后端</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/后端/java/" itemprop="url" rel="index"><span itemprop="name">java</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>排污权做登录日志时遇到的一个问题，<br>错误代码如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@LoginSuccessLog</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> JSONObject <span class="title">login</span><span class="params">(JSONObject user)</span> </span>&#123;</span><br><span class="line">    <span class="comment">/*......多余代码省略......*/</span></span><br><span class="line">    <span class="comment">//该处有问题</span></span><br><span class="line">    SysUser sysUser = validate(loginCode, password);</span><br><span class="line">   <span class="comment">/*......多余代码省略......*/</span></span><br><span class="line">    <span class="keyword">return</span> result;</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line"><span class="meta">@LoginErrorLog</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> SysUser <span class="title">validate</span><span class="params">(String loginCode, String password)</span> </span>&#123;</span><br><span class="line">    <span class="comment">/*......多余代码省略......*/</span></span><br><span class="line">    <span class="keyword">return</span> sysUser;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>由于三端登录时，校验用户名密码等信息与实际登录终端处于不同的步骤，所以我定义了两个切点分别指向的是实际登录方法与用户合法性校验的方法，采用的是注解的方式。<br>但由于企业端不属于三端登录，所以之前的代码结构是login()方法中嵌套了vaildate()方法，及以上代码块中的代码。<br>之后再测试时发现vaildate()方法的注解失效了。</p>
+<a id="more"></a>
+
+<p>查阅资料后得知，方法嵌套调用时是调用的当前对象而非代理对象，及实际调用方式为this.vaildate()，故不生效。</p>
+<p>==spring获取的bean都是其代理对象，而不是bean对象本身。嵌套方法中的内部方法都是对其bean对象本身的方法的调用，所以都不会被代理拦截。==<br>如：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">outerMethod</span><span class="params">()</span></span>&#123;</span><br><span class="line">    innerMethod();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@annotationExample</span></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">innerMethod</span><span class="params">()</span></span>&#123;</span><br><span class="line">    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>该innerMethod()方法是不会被AOP捕捉的。<br>所以解决问题的思路就很明了了：<br>一、生成新的代理对象（建立新类）<br>二、获取当前类的实际代理对象并进行调用<br>三、不使用SpringAOP提供的JDK或者Cglib的方式进行织入，改用AspectJ（编译期织入）  </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">AOP织入方式简介  </span><br><span class="line">织入方式共三种：</span><br><span class="line">1. 编译期织入  </span><br><span class="line">2. 类加载期织入  </span><br><span class="line">3. 运行期织入</span><br></pre></td></tr></table></figure>
+
+<p>我们一般用的Spring AOP都属于运行期织入<br>Spring AOP会根据你是否是属于JDK标准的动态代理来决定是否采用CGlib的方式实现（及目标类是接口等抽象或是真实实现，如果是接口则属于标准的JDK动态代理实现，如果是实现类则采用Cglib生成子类并覆盖方法。）  </p>
+<p>AspectJ则采用的是编译期织入，不属于动态代理，所以不受嵌套方法的影响  </p>
+<hr>
+<p>实际可行的解决方法有以下三种：  </p>
+<ol>
+<li>将vaildate()方法单独放到一个类中去（推荐） </li>
+</ol>
+<p>本来校验业务与登录业务就不应该耦合在一起，其实我觉得当初这种用户校验操作也可以用AOP的方式，登录就是登录，校验就是校验。不过时间问题就不重构了，修改后的代码如下：<br>LoginService.java</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Service</span>(<span class="string">"ETSLoginService"</span>)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">LoginService</span> </span>&#123;</span><br><span class="line"><span class="comment">//注入校验类</span></span><br><span class="line"><span class="meta">@Autowired</span></span><br><span class="line"><span class="keyword">private</span> LoginValidator loginValidator;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * [简述]：用户登陆</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> user</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="meta">@LoginSuccessLog</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> JSONObject <span class="title">login</span><span class="params">(JSONObject user)</span> </span>&#123;</span><br><span class="line">	<span class="comment">/*......多余代码省略......*/</span></span><br><span class="line">	<span class="comment">//改为调用其他类的方式，来代替原有this.validate()的调用方式。</span></span><br><span class="line">        SysUser sysUser = loginValidator.validate(loginCode, password);</span><br><span class="line">        <span class="comment">/*......多余代码省略......*/</span></span><br><span class="line">        <span class="keyword">return</span> result;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>LoginValidator.java</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">@Service</span><br><span class="line">public class LoginValidator &#123;</span><br><span class="line">    @LoginErrorLog</span><br><span class="line">    public SysUser validate(String loginCode, String password) &#123;</span><br><span class="line">	/*......多余代码省略......*/</span><br><span class="line">        return sysUser;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>通过AopContext获得本类代理类对象  </li>
+</ol>
+<p>将  </p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SysUser sysUser = validate(loginCode, password);</span><br></pre></td></tr></table></figure>
+
+<p>替换为  </p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SysUser sysUser = ((LoginService)AopContext.currentProxy()).validate(loginCode, password);</span><br></pre></td></tr></table></figure>
+
+<p>同时  </p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">aop:aspectj-autoproxy</span> <span class="attr">proxy-target-class</span>=<span class="string">"true"</span>/&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>修改为</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">aop:aspectj-autoproxy</span> <span class="attr">proxy-target-class</span>=<span class="string">"true"</span> <span class="attr">expose-proxy</span>=<span class="string">"true"</span>/&gt;</span></span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>通过ApplicationContext对象的getBean()获取当前类的代理对象<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">((LoginService)applicationContext.getBean(<span class="string">"loginService"</span>)).validate(loginCode, password);</span><br></pre></td></tr></table></figure>
+
+</li>
+</ol>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        
+          
+        
+        <div class="post-tags">
+          
+            <a href="/tags/AOP/" rel="tag"># AOP</a>
+          
+            <a href="/tags/Spring/" rel="tag"># Spring</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/11/04/CentOS-7 安装Oracle/" rel="next" title="CentOS-7 安装Oracle">
+                <i class="fa fa-chevron-left"></i> CentOS-7 安装Oracle
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/05/01/CentOS-7下安装RabbitMQ/" rel="prev" title="CentOS-7下安装RabbitMQ">
+                CentOS-7下安装RabbitMQ <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <div class="site-overview-wrap sidebar-panel sidebar-panel-active">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">你丶一顾倾城</p>
+              <div class="site-description motion-element" itemprop="description">你愿意当一根傻傻的韭菜吗</div>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">8</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  
+                    
+                      <a href="/categories/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">10</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                      <a href="/tags/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">8</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/skywaterliu" title="GitHub &rarr; https://github.com/skywaterliu" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="mailto:liutianshui17@gmail.com" title="E-Mail &rarr; mailto:liutianshui17@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://weibo.com/u/5143298180" title="Weibo &rarr; https://weibo.com/u/5143298180" rel="noopener" target="_blank"><i class="fa fa-fw fa-weibo"></i>Weibo</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+
+      
+
+    </div>
+  </aside>
+  
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">你丶一顾倾城</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.1.2</div>
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=3.4.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/utils.js?v=7.1.2"></script>
+
+  <script src="/js/motion.js?v=7.1.2"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/affix.js?v=7.1.2"></script>
+
+  <script src="/js/schemes/pisces.js?v=7.1.2"></script>
+
+
+
+
+  
+  <script src="/js/scrollspy.js?v=7.1.2"></script>
+<script src="/js/post-details.js?v=7.1.2"></script>
+
+
+
+  
+
+
+  <script src="/js/next-boot.js?v=7.1.2"></script>
+
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+
+  
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+<script>
+if ($('body').find('pre.mermaid').length) {
+  $.ajax({
+    type: 'GET',
+    url: '//cdn.bootcss.com/mermaid/8.2.4/mermaid.min.js',
+    dataType: 'script',
+    cache: true,
+    success: function() {
+      mermaid.initialize({
+        theme: 'default',
+        logLevel: 3,
+        flowchart: { curve: 'linear' },
+        gantt: { axisFormat: '%m/%d/%Y' },
+        sequence: { actorMargin: 50 }
+      });
+    }
+  });
+}
+</script>
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

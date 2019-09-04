@@ -1,1 +1,1114 @@
-<!doctype html><html lang="en"><head><meta name="generator" content="Hexo 3.8.0"><meta charset="UTF-8"><meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1"><meta http-equiv="X-UA-Compatible" content="ie=edge"><link rel="shortcut icon" href="/static/favicon.ico"><title>安之一隅</title><link href="/static/css/app.c64eadfc8d3abfc9d85514dba4054813.css" rel="stylesheet"></head><body><div id="app"></div><script type="text/javascript" src="/static/js/manifest.992b63bf2abbf3194771.js"></script><script type="text/javascript" src="/static/js/vendor.e12dc8c9af1f7aa12436.js"></script><script type="text/javascript" src="/static/js/app.bc036f9167871d39aecf.js"></script></body></html>
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link rel="stylesheet" href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+
+<link rel="stylesheet" href="/css/main.css?v=7.1.2">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.1.2">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.1.2">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.1.2">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=7.1.2" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.1.2',
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false,"dimmer":false},
+    back2top: true,
+    back2top_sidebar: false,
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="前言 目前公司大部分的项目都是基于JDK1.6，使用Eclipse开发的。不过我还是想在IDEA上进行开发，用着比较顺手。但是在尝试使用IDEA启动公司项目的过程中遇到了很多问题。在不断尝试下，终于一一解决，特在此记录，以防遗忘。     环境说明 所遇到的各种坑 IDEA如何与resin集成 Maven版本–JDK版本–AspectJ版本之间出现的问题   操作步骤 Resin相关配置 修改启">
+<meta name="keywords" content="环境搭建">
+<meta property="og:type" content="article">
+<meta property="og:title" content="IDEA集成Resin启动Maven项目">
+<meta property="og:url" content="https://skywaterliu.github.io/2019/06/13/IDEA集成Resin启动Maven项目/index.html">
+<meta property="og:site_name" content="安之一隅">
+<meta property="og:description" content="前言 目前公司大部分的项目都是基于JDK1.6，使用Eclipse开发的。不过我还是想在IDEA上进行开发，用着比较顺手。但是在尝试使用IDEA启动公司项目的过程中遇到了很多问题。在不断尝试下，终于一一解决，特在此记录，以防遗忘。     环境说明 所遇到的各种坑 IDEA如何与resin集成 Maven版本–JDK版本–AspectJ版本之间出现的问题   操作步骤 Resin相关配置 修改启">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://skywaterliu.github.io/2019/06/13/IDEA集成Resin启动Maven项目/Resin_Home_Page_alt.png">
+<meta property="og:image" content="https://skywaterliu.github.io/2019/06/13/IDEA集成Resin启动Maven项目/TM20190610104847.jpg">
+<meta property="og:image" content="https://skywaterliu.github.io/2019/06/13/IDEA集成Resin启动Maven项目/TM20190610105525.jpg">
+<meta property="og:image" content="https://skywaterliu.github.io/2019/06/13/IDEA集成Resin启动Maven项目/1560138312663.png">
+<meta property="og:image" content="https://skywaterliu.github.io/2019/06/13/IDEA集成Resin启动Maven项目/1560145602709.png">
+<meta property="og:image" content="https://skywaterliu.github.io/2019/06/13/IDEA集成Resin启动Maven项目/1560138618437.png">
+<meta property="og:image" content="https://skywaterliu.github.io/2019/06/13/IDEA集成Resin启动Maven项目/1560138919190.png">
+<meta property="og:image" content="https://skywaterliu.github.io/2019/06/13/IDEA集成Resin启动Maven项目/1560138982055.png">
+<meta property="og:image" content="https://skywaterliu.github.io/2019/06/13/IDEA集成Resin启动Maven项目/1560139156989.png">
+<meta property="og:image" content="https://skywaterliu.github.io/2019/06/13/IDEA集成Resin启动Maven项目/1560144659492.png">
+<meta property="og:image" content="https://skywaterliu.github.io/2019/06/13/IDEA集成Resin启动Maven项目/1560144708369.png">
+<meta property="og:image" content="https://skywaterliu.github.io/2019/06/13/IDEA集成Resin启动Maven项目/1560144802192.png">
+<meta property="og:updated_time" content="2019-07-15T07:57:32.303Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="IDEA集成Resin启动Maven项目">
+<meta name="twitter:description" content="前言 目前公司大部分的项目都是基于JDK1.6，使用Eclipse开发的。不过我还是想在IDEA上进行开发，用着比较顺手。但是在尝试使用IDEA启动公司项目的过程中遇到了很多问题。在不断尝试下，终于一一解决，特在此记录，以防遗忘。     环境说明 所遇到的各种坑 IDEA如何与resin集成 Maven版本–JDK版本–AspectJ版本之间出现的问题   操作步骤 Resin相关配置 修改启">
+<meta name="twitter:image" content="https://skywaterliu.github.io/2019/06/13/IDEA集成Resin启动Maven项目/Resin_Home_Page_alt.png">
+
+
+
+
+
+  
+  
+  <link rel="canonical" href="https://skywaterliu.github.io/2019/06/13/IDEA集成Resin启动Maven项目/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>IDEA集成Resin启动Maven项目 | 安之一隅</title>
+  
+
+
+
+
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-142123857-1"></script>
+  <script>
+    var host = window.location.hostname;
+    if (host !== "localhost" || !true) {
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'UA-142123857-1');
+    }
+  </script>
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">安之一隅</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">莫听穿林打叶声，何妨吟啸且徐行。</p>
+      
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-schedule">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/calendar" rel="section"><i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br>日程表</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://skywaterliu.github.io/2019/06/13/IDEA集成Resin启动Maven项目/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="你丶一顾倾城">
+      <meta itemprop="description" content="你愿意当一根傻傻的韭菜吗">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="安之一隅">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">IDEA集成Resin启动Maven项目
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-06-13 21:30:00" itemprop="dateCreated datePublished" datetime="2019-06-13T21:30:00+08:00">2019-06-13</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-07-15 15:57:32" itemprop="dateModified" datetime="2019-07-15T15:57:32+08:00">2019-07-15</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Resin/" itemprop="url" rel="index"><span itemprop="name">Resin</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><img src="/2019/06/13/IDEA集成Resin启动Maven项目/Resin_Home_Page_alt.png" alt="Resin"></p>
+<h2><span id="前言">前言</span></h2><blockquote>
+<p>目前公司大部分的项目都是基于JDK1.6，使用Eclipse开发的。不过我还是想在IDEA上进行开发，用着比较顺手。但是在尝试使用IDEA启动公司项目的过程中遇到了很多问题。在不断尝试下，终于一一解决，特在此记录，以防遗忘。</p>
+</blockquote>
+<!-- toc -->
+
+<ul>
+<li><a href="#环境说明">环境说明</a></li>
+<li><a href="#所遇到的各种坑">所遇到的各种坑</a><ul>
+<li><a href="#idea如何与resin集成">IDEA如何与resin集成</a></li>
+<li><a href="#maven版本-jdk版本-aspectj版本之间出现的问题">Maven版本–JDK版本–AspectJ版本之间出现的问题</a></li>
+</ul>
+</li>
+<li><a href="#操作步骤">操作步骤</a><ul>
+<li><a href="#resin相关配置">Resin相关配置</a><ul>
+<li><a href="#修改启动端口">修改启动端口</a></li>
+<li><a href="#修改compiling-loader">修改compiling-loader</a></li>
+<li><a href="#修改工作空间目录">修改工作空间目录</a></li>
+</ul>
+</li>
+<li><a href="#idea相关配置">IDEA相关配置</a><ul>
+<li><a href="#新建resin配置界面">新建Resin配置界面</a></li>
+<li><a href="#server选项卡">Server选项卡</a><ul>
+<li><a href="#配置application-server">配置Application Server</a></li>
+<li><a href="#设置vm-options">设置VM options</a></li>
+<li><a href="#设置jre">设置JRE</a></li>
+<li><a href="#设置resin-configuration-template">设置Resin configuration template</a></li>
+<li><a href="#添加compiler-output目录到classpath">添加compiler output目录到classpath</a></li>
+<li><a href="#端口及字符集配置">端口及字符集配置</a></li>
+</ul>
+</li>
+<li><a href="#deployment选项卡">Deployment选项卡</a><ul>
+<li><a href="#添加所需要发布的artifact">添加所需要发布的Artifact</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#小结">小结</a></li>
+</ul>
+<!-- tocstop -->
+
+<a id="more"></a>
+
+
+
+
+<h2><span id="环境说明">环境说明</span></h2><table>
+<thead>
+<tr>
+<th>名称</th>
+<th>版本</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>项目JRE</td>
+<td>1.6</td>
+</tr>
+<tr>
+<td>maven</td>
+<td>3.2.5</td>
+</tr>
+<tr>
+<td>maven jre</td>
+<td>1.6</td>
+</tr>
+<tr>
+<td>Resin</td>
+<td>3.0.28</td>
+</tr>
+<tr>
+<td>IntelliJ IDEA</td>
+<td>2019.1.2</td>
+</tr>
+</tbody></table>
+<h2><span id="所遇到的各种坑">所遇到的各种坑</span></h2><h3><span id="idea如何与resin集成">IDEA如何与resin集成</span></h3><p>先来说一说在Eclipse中是如何配置的。</p>
+<p>之前一直都是用的tomcat，resin算是刚接触。公司对于resin的配置采用项目对应其特有配置文件的形式进行web容器初始化的。比如，resin默认的配置文件为resin.xml，当resin启动时自身会读取该xml中相关的集群配置、数据源配置、工作目录配置等等。</p>
+<p>在resin与Eclipse的集成过程中，是通过定义主启动函数，并设置其相关参数来进行初始化启动的。示例如下：</p>
+<ol>
+<li><p>添加<strong>Java Application</strong></p>
+<p>点击<strong><em>debug</em></strong>按钮右侧的小箭头，右键左侧菜单中的<strong><em>Java Application</em></strong>，选择<strong><em>new</em></strong>。</p>
+</li>
+<li><p>启动配置</p>
+<ul>
+<li><p><strong>Main</strong>选项卡 </p>
+<p>在右侧新的窗口中，点击第一行<strong><em>Project</em></strong>文本框右侧的<strong><em>Browse…</em></strong>按钮，选择需要进行部署的项目。</p>
+<p><img src="/2019/06/13/IDEA集成Resin启动Maven项目/TM20190610104847.jpg" alt="img"></p>
+<p>在第二行<strong><em>Main Class</em></strong>文本框中输入<code>com.caucho.resin.Resin</code>，指定主启动函数。</p>
+<p>下面的三个复选框可以忽略。</p>
+</li>
+<li><p><strong>Arguments</strong>选项卡</p>
+<p>在第一个<strong><em>Program arguments</em></strong>文本框中，指定项目所用的Resin配置文件。</p>
+<p>在第二个配置文件中指定Resin的home目录、日志实现以及相关jvm参数配置。</p>
+<p><img src="/2019/06/13/IDEA集成Resin启动Maven项目/TM20190610105525.jpg" alt="image"></p>
+</li>
+</ul>
+</li>
+</ol>
+<p>至此，Eclipse与Resin的集成就完成了。</p>
+<p>但是，软件不一样，很多菜单的配置、软件的默认参数都不一样。比如，并没有要求配置Main Class以及Resin Home。</p>
+<p>网上对于IDEA与Resin的集成方法文章较少，照抄是不太现实了，中间遇到了很多报错无法启动。只有自己摸索，不断尝试。具体的操作步骤见<strong>操作步骤</strong>章节中的<strong>Resin相关配置</strong>。</p>
+<h3><span id="maven版本jdk版本aspectj版本之间出现的问题">Maven版本–JDK版本–AspectJ版本之间出现的问题</span></h3><p>这块内容尝试了很长时间，如需最终结论，请看本段最后。</p>
+<ul>
+<li><p><strong>Maven版本与JDK版本</strong></p>
+<p>最开始，我的windows环境中安装了两种JDK版本，分别为1.6与1.8。我将JAVA_HOME设置为1.8，然后在拉完项目后，将项目运行环境以及编译环境（Eclipse中的Compiler）设置为1.6。</p>
+<p>IDEA的Project Structure-&gt;Project选项卡-&gt;Project SDK设置为1.6。但发现此时maven无法clean install，因为我的maven使用的是3.3.6版本，并不支持JDK1.6。</p>
+<p>经过查找，我在IDEA的maven设置中找到可以设置maven自身的运行环境。点击设置中Maven下的Runner选项卡，将JRE调整为了1.8(默认跟随项目jdk版本，所以不调整就是1.6)。</p>
+<p>至此项目至少是可以clean install了。但却发生了下面的问题，见<strong>JDK版本–AspectJ版本</strong>。</p>
+</li>
+<li><p><strong>JDK版本–AspectJ版本</strong></p>
+<p>在集成完成后，出现了这样的报错：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">org.aspectj.apache.bcel.classfile.ClassFormatException: Invalid byte tag in constant pool: 18</span><br></pre></td></tr></table></figure>
+
+<p>经过查找资料，得知是aspectj版本过低的原因导致。可我项目已经配置了1.6的jre了啊？奇了怪了。我详细查看了AspectJ的报错日志，发现了问题所在。其中有一行是：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sun.boot.library.path=C:\Program Files\Java\jdk1.8.0_112\jre\bin</span><br></pre></td></tr></table></figure>
+
+<p>原来在AspectJ进行编译的时候，读取的还是系统环境变量中的JAVA_HOME啊。找到了问题所在，便想从IDEA的项目环境配置入手，可是找了半天还是没找到如何给AspectJ配置环境变量。</p>
+</li>
+<li><p><strong>最终解决思路</strong></p>
+<p>由于AspectJ的限制，所以决定更换系统的JAVA_HOME为1.6的路径。maven也更换为支持jdk1.6的3.2.5版本。IDEA项目中无论是project sdk还是maven的runner等等，都更换为了1.6。终于，项目能够正常打包，AspectJ也可以正常编译了。</p>
+</li>
+</ul>
+<h2><span id="操作步骤">操作步骤</span></h2><h3><span id="resin相关配置">Resin相关配置</span></h3><p>如mic，对应resin/conf目录下的mic-site.conf文件</p>
+<h4><span id="修改启动端口">修改启动端口</span></h4><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- 修改port --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">http</span> <span class="attr">server-id</span>=<span class="string">""</span> <span class="attr">host</span>=<span class="string">"*"</span> <span class="attr">port</span>=<span class="string">"8081"</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h4><span id="修改compiling-loader">修改compiling-loader</span></h4><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">host-default</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">class-loader</span>&gt;</span></span><br><span class="line">        <span class="comment">&lt;!-- 这里不确定是写</span></span><br><span class="line"><span class="comment">			Project Structure-&gt;Project中配置的compile output目录</span></span><br><span class="line"><span class="comment"> 			还是写生成的target中的classes目录，有待后续验证</span></span><br><span class="line"><span class="comment">		--&gt;</span></span><br><span class="line">    	<span class="tag">&lt;<span class="name">compiling-loader</span> <span class="attr">path</span>=<span class="string">"D:\projects\ccs\ccs-web\target\classes"</span>/&gt;</span></span><br><span class="line">        <span class="comment">&lt;!-- library-loade未研究有何影响 --&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">library-loader</span> <span class="attr">path</span>=<span class="string">"webapps/WEB-INF/lib"</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">class-loader</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">host-default</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h4><span id="修改工作空间目录">修改工作空间目录</span></h4><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">host</span> <span class="attr">id</span>=<span class="string">""</span> <span class="attr">root-directory</span>=<span class="string">"."</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">web-app</span> <span class="attr">id</span>=<span class="string">"/"</span> <span class="attr">document-directory</span>=<span class="string">"D:\projects\ccs\ccs-web\src\main\webapp"</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">host</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h3><span id="idea相关配置">IDEA相关配置</span></h3><h4><span id="新建resin配置界面">新建Resin配置界面</span></h4><p><img src="/2019/06/13/IDEA集成Resin启动Maven项目/1560138312663.png" alt="image"></p>
+<h4><span id="server选项卡">Server选项卡</span></h4><p>先来个总图，大概长这样。</p>
+<p><img src="/2019/06/13/IDEA集成Resin启动Maven项目/1560145602709.png" alt="image"></p>
+<h5><span id="配置application-server">配置Application Server</span></h5><p>选择<strong><em>Application Server</em></strong>右侧的<strong><em>Configure…</em></strong>按钮，打开其配置界面。</p>
+<p>设置<strong><em>Resin Home</em></strong>为本地Resin所在目录，并勾选<strong><em>Include all resin JARs</em></strong>复选框。</p>
+<p>设置<strong><em>Default resin configuration file</em></strong>，定义默认的Resin配置文件。</p>
+<p>点击OK完成配置。</p>
+<p><img src="/2019/06/13/IDEA集成Resin启动Maven项目/1560138618437.png" alt="image"></p>
+<h5><span id="设置vm-options">设置VM options</span></h5><p>这里经过测试，不设置resin_home也是可以的，应该是idea会根据之前的配置自动读进去。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">-Djava.util.logging.manager=com.caucho.log.LogManagerImpl</span><br><span class="line">-Xms512m</span><br><span class="line">-Xmx512m</span><br><span class="line">-XX:MaxPermSize=256m</span><br></pre></td></tr></table></figure>
+
+<h5><span id="设置jre">设置JRE</span></h5><p>这里当然选择<strong>1.6</strong></p>
+<h5><span id="设置resin-configuration-template">设置Resin configuration template</span></h5><p>这里定义自己需要配置的自定义启动文件。如：</p>
+<p><img src="/2019/06/13/IDEA集成Resin启动Maven项目/1560138919190.png" alt="1560138919190"></p>
+<p><strong>注意！</strong>，下面有一个复选框，叫做<strong><em>Do not alter Resin configuration</em></strong></p>
+<p><img src="/2019/06/13/IDEA集成Resin启动Maven项目/1560138982055.png" alt="1560138982055"></p>
+<p>这里一定要勾上，亲测如果不勾会读不到上面的配置文件。</p>
+<h5><span id="添加compiler-output目录到classpath">添加compiler output目录到classpath</span></h5><p>如果不勾选<strong><em>Include compiler output and libraries on classpath</em></strong>，则会出现类似以下的报错信息：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">java.lang.ClassNotFoundException: org.springframework.web.filter.CharacterEncodingFilter</span><br></pre></td></tr></table></figure>
+
+<p>一定要勾上这个复选框。</p>
+<p><img src="/2019/06/13/IDEA集成Resin启动Maven项目/1560139156989.png" alt="1560139156989"></p>
+<h5><span id="端口及字符集配置">端口及字符集配置</span></h5><p>如果上面勾选了<strong><em>Do not alter Resin configuration</em></strong>，那么无论这里设置什么http端口，都是以配置文件为准。</p>
+<p><strong><em>JMX port</em></strong>需要每个应用设置的不一样。</p>
+<p><strong><em>charset</em></strong>根据需要进行配置。</p>
+<p><strong><em>Deploy mode</em></strong>设置为<em>automatic</em>即可。</p>
+<h4><span id="deployment选项卡">Deployment选项卡</span></h4><h5><span id="添加所需要发布的artifact">添加所需要发布的Artifact</span></h5><p><img src="/2019/06/13/IDEA集成Resin启动Maven项目/1560144659492.png" alt="1560144659492"></p>
+<p><img src="/2019/06/13/IDEA集成Resin启动Maven项目/1560144708369.png" alt="1560144708369"></p>
+<p><img src="/2019/06/13/IDEA集成Resin启动Maven项目/1560144802192.png" alt="1560144802192"></p>
+<p><strong><em>Deployment method</em></strong>需要修改为resin.xml。</p>
+<p>JMX是把项目打包的文件 放在resin服务器下webapp下 只有在服务器启动时 才把项目给拷贝过去  无法在intellij中实时更新。</p>
+<p>resin.xml是在C盘C:\Users\xxx\AppData\Local\Temp目录下 copy了一份resin.xml的配置文件 然后把服务器目录空间指向了你的项目工作空间  可以实现intellij修改实时更新</p>
+<p>去掉<strong><em>Use default context name(always true if deployment method is JMX)</em></strong>的复选框。</p>
+<p><strong><em>Application context name</em></strong> 保持默认<code>/</code>不变。</p>
+<p>至此，项目已经可以正常启动了。</p>
+<h2><span id="小结">小结</span></h2><p>由于算是初次的尝试，没有现有实例可供参考，难免会有错误，所以开发过程中一定还会遇到各种问题。但我相信，路都是一步步走出来的，<strong>如有问题，恳请指出</strong>。</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        
+          
+        
+        <div class="post-tags">
+          
+            <a href="/tags/环境搭建/" rel="tag"># 环境搭建</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/05/01/CentOS-7下安装RabbitMQ/" rel="next" title="CentOS-7下安装RabbitMQ">
+                <i class="fa fa-chevron-left"></i> CentOS-7下安装RabbitMQ
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/07/14/ArcGIS分布式部署方案/" rel="prev" title="ArcGIS分布式部署方案">
+                ArcGIS分布式部署方案 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">你丶一顾倾城</p>
+              <div class="site-description motion-element" itemprop="description">你愿意当一根傻傻的韭菜吗</div>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">8</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  
+                    
+                      <a href="/categories/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">10</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                      <a href="/tags/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">8</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/skywaterliu" title="GitHub &rarr; https://github.com/skywaterliu" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="mailto:liutianshui17@gmail.com" title="E-Mail &rarr; mailto:liutianshui17@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://weibo.com/u/5143298180" title="Weibo &rarr; https://weibo.com/u/5143298180" rel="noopener" target="_blank"><i class="fa fa-fw fa-weibo"></i>Weibo</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#null"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#null"><span class="nav-number">2.</span> <span class="nav-text">环境说明</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#null"><span class="nav-number">3.</span> <span class="nav-text">所遇到的各种坑</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#null"><span class="nav-number">3.1.</span> <span class="nav-text">IDEA如何与resin集成</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#null"><span class="nav-number">3.2.</span> <span class="nav-text">Maven版本–JDK版本–AspectJ版本之间出现的问题</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#null"><span class="nav-number">4.</span> <span class="nav-text">操作步骤</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#null"><span class="nav-number">4.1.</span> <span class="nav-text">Resin相关配置</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#null"><span class="nav-number">4.1.1.</span> <span class="nav-text">修改启动端口</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#null"><span class="nav-number">4.1.2.</span> <span class="nav-text">修改compiling-loader</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#null"><span class="nav-number">4.1.3.</span> <span class="nav-text">修改工作空间目录</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#null"><span class="nav-number">4.2.</span> <span class="nav-text">IDEA相关配置</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#null"><span class="nav-number">4.2.1.</span> <span class="nav-text">新建Resin配置界面</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#null"><span class="nav-number">4.2.2.</span> <span class="nav-text">Server选项卡</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#null"><span class="nav-number">4.2.2.1.</span> <span class="nav-text">配置Application Server</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#null"><span class="nav-number">4.2.2.2.</span> <span class="nav-text">设置VM options</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#null"><span class="nav-number">4.2.2.3.</span> <span class="nav-text">设置JRE</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#null"><span class="nav-number">4.2.2.4.</span> <span class="nav-text">设置Resin configuration template</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#null"><span class="nav-number">4.2.2.5.</span> <span class="nav-text">添加compiler output目录到classpath</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#null"><span class="nav-number">4.2.2.6.</span> <span class="nav-text">端口及字符集配置</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#null"><span class="nav-number">4.2.3.</span> <span class="nav-text">Deployment选项卡</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#null"><span class="nav-number">4.2.3.1.</span> <span class="nav-text">添加所需要发布的Artifact</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#null"><span class="nav-number">5.</span> <span class="nav-text">小结</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+  
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">你丶一顾倾城</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.1.2</div>
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=3.4.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/utils.js?v=7.1.2"></script>
+
+  <script src="/js/motion.js?v=7.1.2"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/affix.js?v=7.1.2"></script>
+
+  <script src="/js/schemes/pisces.js?v=7.1.2"></script>
+
+
+
+
+  
+  <script src="/js/scrollspy.js?v=7.1.2"></script>
+<script src="/js/post-details.js?v=7.1.2"></script>
+
+
+
+  
+
+
+  <script src="/js/next-boot.js?v=7.1.2"></script>
+
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+
+  
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+<script>
+if ($('body').find('pre.mermaid').length) {
+  $.ajax({
+    type: 'GET',
+    url: '//cdn.bootcss.com/mermaid/8.2.4/mermaid.min.js',
+    dataType: 'script',
+    cache: true,
+    success: function() {
+      mermaid.initialize({
+        theme: 'default',
+        logLevel: 3,
+        flowchart: { curve: 'linear' },
+        gantt: { axisFormat: '%m/%d/%Y' },
+        sequence: { actorMargin: 50 }
+      });
+    }
+  });
+}
+</script>
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
