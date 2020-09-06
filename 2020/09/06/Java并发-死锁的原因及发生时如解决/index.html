@@ -1,0 +1,1027 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link rel="stylesheet" href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link rel="stylesheet" href="/lib/fancybox/source/jquery.fancybox.css">
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+
+<link rel="stylesheet" href="/css/main.css?v=7.1.2">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.1.2">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.1.2">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.1.2">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=7.1.2" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.1.2',
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false,"dimmer":false},
+    back2top: true,
+    back2top_sidebar: false,
+    fancybox: true,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="什么是死锁 死锁的原因 如何减少死锁发生的概率 当死锁发生时 检测死锁 死锁的恢复">
+<meta name="keywords" content="多线程">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java并发-死锁的原因及如何解决">
+<meta property="og:url" content="https://skywaterliu.github.io/2020/09/06/Java并发-死锁的原因及发生时如解决/index.html">
+<meta property="og:site_name" content="安之一隅">
+<meta property="og:description" content="什么是死锁 死锁的原因 如何减少死锁发生的概率 当死锁发生时 检测死锁 死锁的恢复">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2020-09-06T10:20:03.354Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Java并发-死锁的原因及如何解决">
+<meta name="twitter:description" content="什么是死锁 死锁的原因 如何减少死锁发生的概率 当死锁发生时 检测死锁 死锁的恢复">
+
+
+
+
+
+  
+  
+  <link rel="canonical" href="https://skywaterliu.github.io/2020/09/06/Java并发-死锁的原因及发生时如解决/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>Java并发-死锁的原因及如何解决 | 安之一隅</title>
+  
+
+
+
+
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-142123857-1"></script>
+  <script>
+    var host = window.location.hostname;
+    if (host !== "localhost" || !true) {
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'UA-142123857-1');
+    }
+  </script>
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">安之一隅</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">莫听穿林打叶声，何妨吟啸且徐行。</p>
+      
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-schedule">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/calendar" rel="section"><i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br>日程表</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://skywaterliu.github.io/2020/09/06/Java并发-死锁的原因及发生时如解决/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="你丶一顾倾城">
+      <meta itemprop="description" content="你愿意当一根傻傻的韭菜吗">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="安之一隅">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Java并发-死锁的原因及如何解决
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2020-09-06 17:38:00 / 修改时间：18:20:03" itemprop="dateCreated datePublished" datetime="2020-09-06T17:38:00+08:00">2020-09-06</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/后端/" itemprop="url" rel="index"><span itemprop="name">后端</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/后端/java/" itemprop="url" rel="index"><span itemprop="name">java</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <!-- toc -->
+
+<ul>
+<li><a href="#什么是死锁">什么是死锁</a></li>
+<li><a href="#死锁的原因">死锁的原因</a></li>
+<li><a href="#如何减少死锁发生的概率">如何减少死锁发生的概率</a></li>
+<li><a href="#当死锁发生时">当死锁发生时</a><ul>
+<li><a href="#检测死锁">检测死锁</a></li>
+<li><a href="#死锁的恢复">死锁的恢复</a></li>
+</ul>
+</li>
+</ul>
+<!-- tocstop -->
+
+<a id="more"></a>
+
+<h2><span id="什么是死锁">什么是死锁</span></h2><p>死锁是指两个或两个以上的进程在执行过程中，由于竞争资源或者由于彼此通信而造成的一种阻塞的现象，若无外力作用，它们都将无法推进下去。</p>
+<h2><span id="死锁的原因">死锁的原因</span></h2><p><strong>独占锁</strong>：独占锁就是在同一时刻只能有一个线程获取到锁，而其他获取锁的线程只能处于同步队列中等待，只有获取锁的线程释放了锁，后继的线程才能够获取锁。  </p>
+<p>常说的死锁四大条件包括：</p>
+<p>互斥条件 —&gt; 独占锁的特点之一。</p>
+<p>请求与保持条件 —&gt; 独占锁的特点之一，尝试获取锁时并不会释放已经持有的锁</p>
+<p>不剥夺条件 —&gt; 独占锁的特点之一。</p>
+<p>循环等待条件 —&gt; 唯一需要记忆的造成死锁的条件。</p>
+<p>如下代码会出现死锁：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DeadLockTest</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        String lockA = <span class="string">"A"</span>;</span><br><span class="line">        String lockB = <span class="string">"B"</span>;</span><br><span class="line">        <span class="keyword">new</span> Thread(() -&gt; &#123;</span><br><span class="line">            <span class="keyword">synchronized</span> (lockA)&#123;</span><br><span class="line">                <span class="keyword">try</span> &#123;</span><br><span class="line">                    Thread.sleep(<span class="number">100</span>);</span><br><span class="line">                &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">                    e.printStackTrace();</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">synchronized</span> (lockB)&#123;</span><br><span class="line">                    System.out.println(<span class="string">"this is b"</span>);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;).start();</span><br><span class="line">        <span class="keyword">new</span> Thread(() -&gt; &#123;</span><br><span class="line">            <span class="keyword">synchronized</span> (lockB)&#123;</span><br><span class="line">                <span class="keyword">synchronized</span> (lockA)&#123;</span><br><span class="line">                    System.out.println(<span class="string">"this is a"</span>);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;).start();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>线程1一开始获取了锁A并占用100ms，此时线程2先获取到了锁B，然后尝试获取锁A，但A被线程1占用，所以线程2进入了锁池等待竞争锁A。当线程1执行到需要获取锁B，可锁B被线程2所占用未释放，所以线程1进入了锁B的等待池，等待竞争锁B。至此，两个线程都进入了等待阶段，而两个线程又都不会释放自身所持有的锁。从而造成了死锁。</p>
+<h2><span id="如何减少死锁发生的概率">如何减少死锁发生的概率</span></h2><ol>
+<li>如果想要打破互斥条件，我们需要允许进程同时访问某些资源，这种方法受制于实际场景，不太容易实现条件；</li>
+<li>打破不可抢占条件，这样需要允许进程强行从占有者那里夺取某些资源，或者简单一点理解，占有资源的进程不能再申请占有其他资源，必须释放手上的资源之后才能发起申请，这个其实也很难找到适用场景；</li>
+<li>进程在运行前申请得到所有的资源，否则该进程不能进入准备执行状态。这个方法看似有点用处，但是它的缺点是可能导致资源利用率和进程并发性降低；</li>
+<li>避免出现资源申请环路，即对资源事先分类编号，按号分配。这种方式可以有效提高资源的利用率和系统吞吐量，但是增加了系统开销，增大了进程对资源的占用时间。</li>
+</ol>
+<ul>
+<li>避免一个线程同时获取多个锁</li>
+<li>避免一个线程在锁内同时占用多个资源，尽量保证每个锁只占用一个资源。</li>
+<li>尝试使用定时锁，使用lock.tryLock（timeout）来替代使用内部锁机制。</li>
+<li>对于数据库锁，加锁和解锁必须在一个数据库连接里，否则会出现解锁失败的情况。  </li>
+</ul>
+<h2><span id="当死锁发生时">当死锁发生时</span></h2><h3><span id="检测死锁">检测死锁</span></h3><ol>
+<li><p><strong>使用jps工具</strong></p>
+<p>jps是jdk提供的一个查看当前java进程的小工具， 可以看做是JavaVirtual Machine Process Status Tool的缩写。非常简单实用。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">命令格式：jps [options ] [ hostid ] </span><br><span class="line"></span><br><span class="line">[options]选项 ：</span><br><span class="line">-q：仅输出VM标识符，不包括classname,jar name,arguments in main method </span><br><span class="line">-m：输出main method的参数 </span><br><span class="line">-l：输出完全的包名，应用主类名，jar的完全路径名 </span><br><span class="line">-v：输出jvm参数 </span><br><span class="line">-V：输出通过flag文件传递到JVM中的参数(.hotspotrc文件或-XX:Flags=所指定的文件 </span><br><span class="line">-Joption：传递参数到vm,例如:-J-Xms512m</span><br><span class="line"></span><br><span class="line">[hostid]：</span><br><span class="line"></span><br><span class="line">[protocol:][[//]hostname][:port][/servername]</span><br><span class="line"></span><br><span class="line">命令的输出格式 ：</span><br><span class="line">lvmid [[classname|JARfilename|&quot;Unknown&quot;][arg*][jvmarg*]]</span><br></pre></td></tr></table></figure>
+
+
+</li>
+</ol>
+<p>   这里用jps -l，找到我们实际用的进程</p>
+   <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">D:\projects\my\demo&gt;jps -l</span><br><span class="line">13696 com.caucho.server.resin.Resin</span><br><span class="line">14708 org.jetbrains.jps.cmdline.Launcher</span><br><span class="line">13168 com.caucho.server.resin.Resin</span><br><span class="line">14208 org.jetbrains.jps.cmdline.Launcher</span><br><span class="line">14240 org.jetbrains.idea.maven.server.RemoteMavenServer</span><br><span class="line">16412 com.skywater.demo.thread.art.one.DeadLockTest</span><br><span class="line">12620 org.jetbrains.jps.cmdline.Launcher</span><br><span class="line">12552 org.jetbrains.jps.cmdline.Launcher</span><br><span class="line">7560 com.caucho.server.resin.Resin</span><br><span class="line">4360 org.jetbrains.kotlin.daemon.KotlinCompileDaemon</span><br><span class="line">2424 org.codehaus.plexus.classworlds.launcher.Launcher</span><br><span class="line">15560</span><br><span class="line">15424 sun.tools.jps.Jps</span><br></pre></td></tr></table></figure>
+
+
+<p>   及<code>com.skywater.demo.thread.art.one.DeadLockTest</code>对应的16412</p>
+<ol start="2">
+<li><p><strong>使用jstack</strong></p>
+<p>jstack是java虚拟机自带的一种堆栈跟踪工具。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">D:\projects\my\demo&gt;jstack -h</span><br><span class="line">Usage:</span><br><span class="line">    jstack [-l] &lt;pid&gt;</span><br><span class="line">        (to connect to running process)</span><br><span class="line">    jstack -F [-m] [-l] &lt;pid&gt;</span><br><span class="line">        (to connect to a hung process)</span><br><span class="line">    jstack [-m] [-l] &lt;executable&gt; &lt;core&gt;</span><br><span class="line">        (to connect to a core file)</span><br><span class="line">    jstack [-m] [-l] [server_id@]&lt;remote server IP or hostname&gt;</span><br><span class="line">        (to connect to a remote debug server)</span><br><span class="line"></span><br><span class="line">Options:</span><br><span class="line">    -F  to force a thread dump. Use when jstack &lt;pid&gt; does not respond (process is hung)</span><br><span class="line">    -m  to print both java and native frames (mixed mode)</span><br><span class="line">    -l  long listing. Prints additional information about locks</span><br><span class="line">    -h or -help to print this help message</span><br></pre></td></tr></table></figure>
+
+<p>jstack用于打印出给定的java进程ID或core file或远程调试服务的Java堆栈信息，如果是在64位机器上，需要指定选项”-J-d64”，Windows的jstack使用方式只支持以下的这种方式：<code>jstack [-l] pid</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br></pre></td><td class="code"><pre><span class="line">    D:\projects\my\demo&gt;jstack 16412</span><br><span class="line">   2020-06-08 16:44:04</span><br><span class="line">Full thread dump Java HotSpot(TM) 64-Bit Server VM (25.112-b15 mixed mode):</span><br><span class="line">      </span><br><span class="line">   &quot;DestroyJavaVM&quot; #13 prio=5 os_prio=0 tid=0x000000000215a800 nid=0x3324 waiting on condition [0x0000000000000000]</span><br><span class="line">         java.lang.Thread.State: RUNNABLE</span><br><span class="line">      </span><br><span class="line">      &quot;Thread-1&quot; #12 prio=5 os_prio=0 tid=0x000000001e3b0800 nid=0x22c0 waiting for monitor entry [0x000000001ecbf000]</span><br><span class="line">         java.lang.Thread.State: BLOCKED (on object monitor)</span><br><span class="line">              at com.skywater.demo.thread.art.one.DeadLockTest.lambda$main$1(DeadLockTest.java:41)</span><br><span class="line">              - waiting to lock &lt;0x000000076b8a9318&gt; (a java.lang.String)</span><br><span class="line">              - locked &lt;0x000000076b8a9348&gt; (a java.lang.String)</span><br><span class="line">              at com.skywater.demo.thread.art.one.DeadLockTest$$Lambda$2/812265671.run(Unknown Source)</span><br><span class="line">              at java.lang.Thread.run(Thread.java:745)</span><br><span class="line">      </span><br><span class="line">      &quot;Thread-0&quot; #11 prio=5 os_prio=0 tid=0x000000001e3b0000 nid=0x43f4 waiting for monitor entry [0x000000001eb6f000]</span><br><span class="line">         java.lang.Thread.State: BLOCKED (on object monitor)</span><br><span class="line">              at com.skywater.demo.thread.art.one.DeadLockTest.lambda$main$0(DeadLockTest.java:29)</span><br><span class="line">              - waiting to lock &lt;0x000000076b8a9348&gt; (a java.lang.String)</span><br><span class="line">              - locked &lt;0x000000076b8a9318&gt; (a java.lang.String)</span><br><span class="line">              at com.skywater.demo.thread.art.one.DeadLockTest$$Lambda$1/94438417.run(Unknown Source)</span><br><span class="line">              at java.lang.Thread.run(Thread.java:745)</span><br><span class="line">      </span><br><span class="line">      &quot;Service Thread&quot; #10 daemon prio=9 os_prio=0 tid=0x000000001d4c0000 nid=0x3844 runnable [0x0000000000000000]</span><br><span class="line">         java.lang.Thread.State: RUNNABLE</span><br><span class="line">      </span><br><span class="line">      &quot;C1 CompilerThread2&quot; #9 daemon prio=9 os_prio=2 tid=0x000000001d421000 nid=0xc90 waiting on condition [0x0000000000000000]</span><br><span class="line">         java.lang.Thread.State: RUNNABLE</span><br><span class="line">      </span><br><span class="line">      &quot;C2 CompilerThread1&quot; #8 daemon prio=9 os_prio=2 tid=0x000000001d434000 nid=0x3d14 waiting on condition [0x0000000000000000]</span><br><span class="line">         java.lang.Thread.State: RUNNABLE</span><br><span class="line">      </span><br><span class="line">      &quot;C2 CompilerThread0&quot; #7 daemon prio=9 os_prio=2 tid=0x000000001d433800 nid=0x3120 waiting on condition [0x0000000000000000]</span><br><span class="line">         java.lang.Thread.State: RUNNABLE</span><br><span class="line">      </span><br><span class="line">      &quot;Monitor Ctrl-Break&quot; #6 daemon prio=5 os_prio=0 tid=0x000000001d432000 nid=0x2898 runnable [0x000000001d8ce000]</span><br><span class="line">         java.lang.Thread.State: RUNNABLE</span><br><span class="line">              at java.net.SocketInputStream.socketRead0(Native Method)</span><br><span class="line">              at java.net.SocketInputStream.socketRead(SocketInputStream.java:116)</span><br><span class="line">              at java.net.SocketInputStream.read(SocketInputStream.java:170)</span><br><span class="line">              at java.net.SocketInputStream.read(SocketInputStream.java:141)</span><br><span class="line">              at sun.nio.cs.StreamDecoder.readBytes(StreamDecoder.java:284)</span><br><span class="line">              at sun.nio.cs.StreamDecoder.implRead(StreamDecoder.java:326)</span><br><span class="line">              at sun.nio.cs.StreamDecoder.read(StreamDecoder.java:178)</span><br><span class="line">              - locked &lt;0x000000076b64f008&gt; (a java.io.InputStreamReader)</span><br><span class="line">              at java.io.InputStreamReader.read(InputStreamReader.java:184)</span><br><span class="line">              at java.io.BufferedReader.fill(BufferedReader.java:161)</span><br><span class="line">              at java.io.BufferedReader.readLine(BufferedReader.java:324)</span><br><span class="line">              - locked &lt;0x000000076b64f008&gt; (a java.io.InputStreamReader)</span><br><span class="line">              at java.io.BufferedReader.readLine(BufferedReader.java:389)</span><br><span class="line">              at com.intellij.rt.execution.application.AppMainV2$1.run(AppMainV2.java:61)</span><br><span class="line">      </span><br><span class="line">      &quot;Attach Listener&quot; #5 daemon prio=5 os_prio=2 tid=0x000000001d10a800 nid=0x3618 waiting on condition [0x0000000000000000]</span><br><span class="line">         java.lang.Thread.State: RUNNABLE</span><br><span class="line">      </span><br><span class="line">      &quot;Signal Dispatcher&quot; #4 daemon prio=9 os_prio=2 tid=0x000000001be1f000 nid=0xc48 runnable [0x0000000000000000]</span><br><span class="line">         java.lang.Thread.State: RUNNABLE</span><br><span class="line">      </span><br><span class="line">      &quot;Finalizer&quot; #3 daemon prio=8 os_prio=1 tid=0x000000001bdf7000 nid=0x25fc in Object.wait() [0x000000001cf8e000]</span><br><span class="line">         java.lang.Thread.State: WAITING (on object monitor)</span><br><span class="line">              at java.lang.Object.wait(Native Method)</span><br><span class="line">              - waiting on &lt;0x000000076b388e98&gt; (a java.lang.ref.ReferenceQueue$Lock)</span><br><span class="line">              at java.lang.ref.ReferenceQueue.remove(ReferenceQueue.java:143)</span><br><span class="line">              - locked &lt;0x000000076b388e98&gt; (a java.lang.ref.ReferenceQueue$Lock)</span><br><span class="line">              at java.lang.ref.ReferenceQueue.remove(ReferenceQueue.java:164)</span><br><span class="line">              at java.lang.ref.Finalizer$FinalizerThread.run(Finalizer.java:209)</span><br><span class="line">      </span><br><span class="line">      &quot;Reference Handler&quot; #2 daemon prio=10 os_prio=2 tid=0x000000001bdb5800 nid=0x45a8 in Object.wait() [0x000000001d0fe000]</span><br><span class="line">         java.lang.Thread.State: WAITING (on object monitor)</span><br><span class="line">              at java.lang.Object.wait(Native Method)</span><br><span class="line">              - waiting on &lt;0x000000076b386b40&gt; (a java.lang.ref.Reference$Lock)</span><br><span class="line">              at java.lang.Object.wait(Object.java:502)</span><br><span class="line">              at java.lang.ref.Reference.tryHandlePending(Reference.java:191)</span><br><span class="line">              - locked &lt;0x000000076b386b40&gt; (a java.lang.ref.Reference$Lock)</span><br><span class="line">              at java.lang.ref.Reference$ReferenceHandler.run(Reference.java:153)</span><br><span class="line">      </span><br><span class="line">      &quot;VM Thread&quot; os_prio=2 tid=0x000000001bdae000 nid=0x4018 runnable</span><br><span class="line">      </span><br><span class="line">      &quot;GC task thread#0 (ParallelGC)&quot; os_prio=0 tid=0x0000000002170000 nid=0x18b4 runnable</span><br><span class="line">      </span><br><span class="line">      &quot;GC task thread#1 (ParallelGC)&quot; os_prio=0 tid=0x0000000002171800 nid=0x331c runnable</span><br><span class="line">      </span><br><span class="line">      &quot;GC task thread#2 (ParallelGC)&quot; os_prio=0 tid=0x0000000002173000 nid=0x4154 runnable</span><br><span class="line">      </span><br><span class="line">      &quot;GC task thread#3 (ParallelGC)&quot; os_prio=0 tid=0x0000000002174800 nid=0x3888 runnable</span><br><span class="line">      </span><br><span class="line">      &quot;VM Periodic Task Thread&quot; os_prio=2 tid=0x000000001e14a000 nid=0x31bc waiting on condition</span><br><span class="line">      </span><br><span class="line">      JNI global references: 335</span><br><span class="line">      </span><br><span class="line">      </span><br><span class="line">      Found one Java-level deadlock:</span><br><span class="line">      =============================</span><br><span class="line">      &quot;Thread-1&quot;:</span><br><span class="line">        waiting to lock monitor 0x000000001be02208 (object 0x000000076b8a9318, a java.lang.String),</span><br><span class="line">        which is held by &quot;Thread-0&quot;</span><br><span class="line">      &quot;Thread-0&quot;:</span><br><span class="line">        waiting to lock monitor 0x000000001be036a8 (object 0x000000076b8a9348, a java.lang.String),</span><br><span class="line">        which is held by &quot;Thread-1&quot;</span><br><span class="line">      </span><br><span class="line">      Java stack information for the threads listed above:</span><br><span class="line">      ===================================================</span><br><span class="line">      &quot;Thread-1&quot;:</span><br><span class="line">              at com.skywater.demo.thread.art.one.DeadLockTest.lambda$main$1(DeadLockTest.java:41)</span><br><span class="line">              - waiting to lock &lt;0x000000076b8a9318&gt; (a java.lang.String)</span><br><span class="line">              - locked &lt;0x000000076b8a9348&gt; (a java.lang.String)</span><br><span class="line">              at com.skywater.demo.thread.art.one.DeadLockTest$$Lambda$2/812265671.run(Unknown Source)</span><br><span class="line">              at java.lang.Thread.run(Thread.java:745)</span><br><span class="line">      &quot;Thread-0&quot;:</span><br><span class="line">              at com.skywater.demo.thread.art.one.DeadLockTest.lambda$main$0(DeadLockTest.java:29)</span><br><span class="line">              - waiting to lock &lt;0x000000076b8a9348&gt; (a java.lang.String)</span><br><span class="line">              - locked &lt;0x000000076b8a9318&gt; (a java.lang.String)</span><br><span class="line">              at com.skywater.demo.thread.art.one.DeadLockTest$$Lambda$1/94438417.run(Unknown Source)</span><br><span class="line">              at java.lang.Thread.run(Thread.java:745)</span><br><span class="line">      </span><br><span class="line">      Found 1 deadlock.</span><br></pre></td></tr></table></figure>
+
+
+</li>
+</ol>
+<p>   可见显示有1个死锁<code>Found 1 deadlock.</code></p>
+<h3><span id="死锁的恢复">死锁的恢复</span></h3><p>一旦在死锁检测时发现了死锁，就要消除死锁，使系统从死锁状态中恢复过来。 </p>
+<ol>
+<li>最简单，最常用的方法就是进行系统的重新启动，不过这种方法代价很大，它意味着在这之前所有的进程已经完成的计算工作都将付之东流，包括参与死锁的那些进程，以及未参与死锁的进程。</li>
+<li>撤消进程，剥夺资源。终止参与死锁的进程，收回它们占有的资源，从而解除死锁。这时又分两种情况：一次性撤消参与死锁的全部进程，剥夺全部资源；或者逐步撤消参与死锁的进程，逐步收回死锁进程占有的资源。一般来说，选择逐步撤消的进程时要按照一定的原则进行，目的是撤消那些代价最小的进程，比如按进程的优先级确定进程的代价；考虑进程运行时的代价和与此进程相关的外部作业的代价等因素。 </li>
+<li>进程回退策略，即让参与死锁的进程回退到没有发生死锁前某一点处，并由此点处继续执行，以求再次执行时不再发生死锁。虽然这是个较理想的办法，但是操作起来系统开销极大，要有堆栈这样的机构记录进程的每一步变化，以便今后的回退，有时这是无法做到的。</li>
+</ol>
+<hr>
+<blockquote>
+<p><strong>参考</strong></p>
+<p>&lt;&lt;<a href="https://book.douban.com/subject/26591326/" target="_blank" rel="noopener">Java并发编程的艺术</a>&gt;&gt;</p>
+<p><a href="https://www.ibm.com/developerworks/cn/java/j-lo-deadlock/index.html" target="_blank" rel="noopener">Java 程序死锁问题原理及解决方案</a></p>
+</blockquote>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        
+          
+        
+        <div class="post-tags">
+          
+            <a href="/tags/多线程/" rel="tag"># 多线程</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/09/06/Java并发-CPU如何实现的多线程/" rel="next" title="Java并发-CPU如何实现的多线程">
+                <i class="fa fa-chevron-left"></i> Java并发-CPU如何实现的多线程
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/09/06/Java并发-Synchronized的实现/" rel="prev" title="Java并发-Synchronized的实现">
+                Java并发-Synchronized的实现 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">你丶一顾倾城</p>
+              <div class="site-description motion-element" itemprop="description">你愿意当一根傻傻的韭菜吗</div>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">13</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  
+                    
+                      <a href="/categories/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">12</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                      <a href="/tags/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">9</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/skywaterliu" title="GitHub &rarr; https://github.com/skywaterliu" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="mailto:liutianshui17@gmail.com" title="E-Mail &rarr; mailto:liutianshui17@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://weibo.com/u/5143298180" title="Weibo &rarr; https://weibo.com/u/5143298180" rel="noopener" target="_blank"><i class="fa fa-fw fa-weibo"></i>Weibo</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#null"><span class="nav-number">1.</span> <span class="nav-text">什么是死锁</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#null"><span class="nav-number">2.</span> <span class="nav-text">死锁的原因</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#null"><span class="nav-number">3.</span> <span class="nav-text">如何减少死锁发生的概率</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#null"><span class="nav-number">4.</span> <span class="nav-text">当死锁发生时</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#null"><span class="nav-number">4.1.</span> <span class="nav-text">检测死锁</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#null"><span class="nav-number">4.2.</span> <span class="nav-text">死锁的恢复</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+  
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">你丶一顾倾城</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.1.2</div>
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+    
+    
+  
+  <script color="0,0,255" opacity="0.5" zindex="-1" count="99" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=3.4.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/fancybox/source/jquery.fancybox.pack.js"></script>
+
+
+  
+
+
+  <script src="/js/utils.js?v=7.1.2"></script>
+
+  <script src="/js/motion.js?v=7.1.2"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/affix.js?v=7.1.2"></script>
+
+  <script src="/js/schemes/pisces.js?v=7.1.2"></script>
+
+
+
+
+  
+  <script src="/js/scrollspy.js?v=7.1.2"></script>
+<script src="/js/post-details.js?v=7.1.2"></script>
+
+
+
+  
+
+
+  <script src="/js/next-boot.js?v=7.1.2"></script>
+
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+
+  
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+<script>
+if ($('body').find('pre.mermaid').length) {
+  $.ajax({
+    type: 'GET',
+    url: '//cdn.bootcss.com/mermaid/8.2.4/mermaid.min.js',
+    dataType: 'script',
+    cache: true,
+    success: function() {
+      mermaid.initialize({
+        theme: 'default',
+        logLevel: 3,
+        flowchart: { curve: 'linear' },
+        gantt: { axisFormat: '%m/%d/%Y' },
+        sequence: { actorMargin: 50 }
+      });
+    }
+  });
+}
+</script>
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

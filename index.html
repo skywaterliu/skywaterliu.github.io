@@ -45,6 +45,10 @@
 
 
 
+  
+  
+  <link rel="stylesheet" href="/lib/fancybox/source/jquery.fancybox.css">
+
 
 
 
@@ -82,7 +86,7 @@
     sidebar: {"position":"left","display":"post","offset":12,"onmobile":false,"dimmer":false},
     back2top: true,
     back2top_sidebar: false,
-    fancybox: false,
+    fancybox: true,
     fastclick: false,
     lazyload: false,
     tabs: true,
@@ -329,6 +333,969 @@
           <div id="content" class="content">
             
   <section id="posts" class="posts-expand">
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://skywaterliu.github.io/2020/09/06/Java并发-Synchronized的实现/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="你丶一顾倾城">
+      <meta itemprop="description" content="你愿意当一根傻傻的韭菜吗">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="安之一隅">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2020/09/06/Java并发-Synchronized的实现/" class="post-title-link" itemprop="url">Java并发-Synchronized的实现</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2020-09-06 17:38:00 / 修改时间：18:18:31" itemprop="dateCreated datePublished" datetime="2020-09-06T17:38:00+08:00">2020-09-06</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/后端/" itemprop="url" rel="index"><span itemprop="name">后端</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/后端/java/" itemprop="url" rel="index"><span itemprop="name">java</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <!-- toc -->
+
+<ul>
+<li><a href="#monitor基础">Monitor基础</a><ul>
+<li><a href="#为什么要学习monitor">为什么要学习Monitor</a></li>
+<li><a href="#什么是monitor">什么是Monitor</a></li>
+<li><a href="#monitor结构">Monitor结构</a></li>
+<li><a href="#monitor序列图">Monitor序列图</a></li>
+<li><a href="#java-monitor-object">Java Monitor Object</a></li>
+</ul>
+</li>
+<li><a href="#synchronized实现原理">Synchronized实现原理</a><ul>
+<li><a href="#对象头">对象头</a></li>
+<li><a href="#mark-word">Mark Word</a></li>
+<li><a href="#lock-record">Lock Record</a></li>
+<li><a href="#锁类型与锁的升级">锁类型与锁的升级</a><ul>
+<li><a href="#偏向锁">偏向锁</a><ul>
+<li><a href="#关闭偏向锁">关闭偏向锁</a></li>
+</ul>
+</li>
+<li><a href="#轻量级锁">轻量级锁</a></li>
+<li><a href="#重量级锁">重量级锁</a></li>
+<li><a href="#三种锁的对比">三种锁的对比</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<!-- tocstop -->
+          <!--noindex-->
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2020/09/06/Java并发-Synchronized的实现/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://skywaterliu.github.io/2020/09/06/Java并发-死锁的原因及发生时如解决/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="你丶一顾倾城">
+      <meta itemprop="description" content="你愿意当一根傻傻的韭菜吗">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="安之一隅">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2020/09/06/Java并发-死锁的原因及发生时如解决/" class="post-title-link" itemprop="url">Java并发-死锁的原因及如何解决</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2020-09-06 17:38:00 / 修改时间：18:20:03" itemprop="dateCreated datePublished" datetime="2020-09-06T17:38:00+08:00">2020-09-06</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/后端/" itemprop="url" rel="index"><span itemprop="name">后端</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/后端/java/" itemprop="url" rel="index"><span itemprop="name">java</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <!-- toc -->
+
+<ul>
+<li><a href="#什么是死锁">什么是死锁</a></li>
+<li><a href="#死锁的原因">死锁的原因</a></li>
+<li><a href="#如何减少死锁发生的概率">如何减少死锁发生的概率</a></li>
+<li><a href="#当死锁发生时">当死锁发生时</a><ul>
+<li><a href="#检测死锁">检测死锁</a></li>
+<li><a href="#死锁的恢复">死锁的恢复</a></li>
+</ul>
+</li>
+</ul>
+<!-- tocstop -->
+          <!--noindex-->
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2020/09/06/Java并发-死锁的原因及发生时如解决/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://skywaterliu.github.io/2020/09/06/Java并发-CPU如何实现的多线程/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="你丶一顾倾城">
+      <meta itemprop="description" content="你愿意当一根傻傻的韭菜吗">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="安之一隅">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2020/09/06/Java并发-CPU如何实现的多线程/" class="post-title-link" itemprop="url">Java并发-CPU如何实现的多线程</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2020-09-06 17:38:00 / 修改时间：18:20:03" itemprop="dateCreated datePublished" datetime="2020-09-06T17:38:00+08:00">2020-09-06</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/后端/" itemprop="url" rel="index"><span itemprop="name">后端</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/后端/java/" itemprop="url" rel="index"><span itemprop="name">java</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <!-- toc -->
+
+<ul>
+<li><a href="#时间片">时间片</a></li>
+<li><a href="#上下文切换">上下文切换</a></li>
+<li><a href="#如何减少上下文的切换">如何减少上下文的切换</a></li>
+</ul>
+<!-- tocstop -->
+          <!--noindex-->
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2020/09/06/Java并发-CPU如何实现的多线程/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://skywaterliu.github.io/2020/01/07/常见端口汇总/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="你丶一顾倾城">
+      <meta itemprop="description" content="你愿意当一根傻傻的韭菜吗">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="安之一隅">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2020/01/07/常见端口汇总/" class="post-title-link" itemprop="url">常见端口汇总</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2020-01-07 10:39:00" itemprop="dateCreated datePublished" datetime="2020-01-07T10:39:00+08:00">2020-01-07</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2020-09-06 18:13:57" itemprop="dateModified" datetime="2020-09-06T18:13:57+08:00">2020-09-06</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/java/" itemprop="url" rel="index"><span itemprop="name">java</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <!-- toc -->
+
+<ul>
+<li><a href="#常见端口汇总">常见端口汇总：</a><pre><code>- [Hadoop](#hadoop)
+- [Zookeeper](#zookeeper)
+- [Hbase](#hbase)
+- [Hive](#hive)
+- [Spark](#spark)
+- [Kafka](#kafka)
+- [Redis](#redis)
+- [CDH](#cdh)
+- [HUE](#hue)</code></pre></li>
+</ul>
+<!-- tocstop -->
+          <!--noindex-->
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2020/01/07/常见端口汇总/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://skywaterliu.github.io/2020/01/06/DBeaver连接Hive/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="你丶一顾倾城">
+      <meta itemprop="description" content="你愿意当一根傻傻的韭菜吗">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="安之一隅">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2020/01/06/DBeaver连接Hive/" class="post-title-link" itemprop="url">DBeaver连接Hive</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2020-01-06 15:55:00" itemprop="dateCreated datePublished" datetime="2020-01-06T15:55:00+08:00">2020-01-06</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2020-09-06 18:14:12" itemprop="dateModified" datetime="2020-09-06T18:14:12+08:00">2020-09-06</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Hive/" itemprop="url" rel="index"><span itemprop="name">Hive</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <!-- toc -->
+
+<ul>
+<li><a href="#dbeaver连接hive">DBeaver连接Hive</a><ul>
+<li><a href="#环境说明">环境说明</a></li>
+<li><a href="#操作步骤">操作步骤</a><ul>
+<li><a href="#新建数据库连接">新建数据库连接</a></li>
+<li><a href="#配置常规信息">配置常规信息</a></li>
+<li><a href="#编辑驱动设置">编辑驱动设置</a><ul>
+<li><a href="#下载方式">下载方式</a><ul>
+<li><a href="#hive-jdbc">hive-jdbc</a></li>
+<li><a href="#hadoop-common">hadoop-common</a></li>
+</ul>
+</li>
+<li><a href="#本地添加方式">本地添加方式</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#常见问题">常见问题</a></li>
+</ul>
+</li>
+</ul>
+<!-- tocstop -->
+          <!--noindex-->
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2020/01/06/DBeaver连接Hive/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
     
       
 
@@ -1397,612 +2364,13 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://skywaterliu.github.io/2019/05/01/CentOS-7下安装RabbitMQ/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="你丶一顾倾城">
-      <meta itemprop="description" content="你愿意当一根傻傻的韭菜吗">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="安之一隅">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2019/05/01/CentOS-7下安装RabbitMQ/" class="post-title-link" itemprop="url">CentOS-7下安装RabbitMQ</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2019-05-01 15:58:00" itemprop="dateCreated datePublished" datetime="2019-05-01T15:58:00+08:00">2019-05-01</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2019-07-15 15:56:26" itemprop="dateModified" datetime="2019-07-15T15:56:26+08:00">2019-07-15</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/RabbitMQ/" itemprop="url" rel="index"><span itemprop="name">RabbitMQ</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <!-- toc -->
-
-<ul>
-<li><a href="#相关依赖">相关依赖</a><ul>
-<li><a href="#安装erlang">安装erlang</a></li>
-</ul>
-</li>
-<li><a href="#安装rabbitmq-server">安装rabbitmq-server</a><ul>
-<li><a href="#添加仓库并安装">添加仓库并安装</a></li>
-<li><a href="#开启远程访问限制">开启远程访问限制</a></li>
-<li><a href="#开启web访问需要先开远程访问限制">开启web访问（需要先开远程访问限制）</a></li>
-<li><a href="#安装消息延迟插件">安装消息延迟插件</a></li>
-<li><a href="#放行端口">放行端口</a></li>
-<li><a href="#启动停止重启服务">启动/停止/重启服务</a></li>
-<li><a href="#查看状态">查看状态</a></li>
-<li><a href="#设为开机自动启动">设为开机自动启动</a></li>
-</ul>
-</li>
-</ul>
-<!-- tocstop -->
-          <!--noindex-->
-          
-            <div class="post-button text-center">
-              <a class="btn" href="/2019/05/01/CentOS-7下安装RabbitMQ/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://skywaterliu.github.io/2018/12/03/Spring AOP 嵌套使用时内部方法注解失效问题/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="你丶一顾倾城">
-      <meta itemprop="description" content="你愿意当一根傻傻的韭菜吗">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="安之一隅">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2018/12/03/Spring AOP 嵌套使用时内部方法注解失效问题/" class="post-title-link" itemprop="url">Spring AOP 嵌套使用时内部方法注解失效问题</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2018-12-03 22:57:00" itemprop="dateCreated datePublished" datetime="2018-12-03T22:57:00+08:00">2018-12-03</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2019-07-15 15:58:03" itemprop="dateModified" datetime="2019-07-15T15:58:03+08:00">2019-07-15</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/后端/" itemprop="url" rel="index"><span itemprop="name">后端</span></a></span>
-
-                
-                
-                  ，
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/后端/java/" itemprop="url" rel="index"><span itemprop="name">java</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>排污权做登录日志时遇到的一个问题，<br>错误代码如下：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@LoginSuccessLog</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> JSONObject <span class="title">login</span><span class="params">(JSONObject user)</span> </span>&#123;</span><br><span class="line">    <span class="comment">/*......多余代码省略......*/</span></span><br><span class="line">    <span class="comment">//该处有问题</span></span><br><span class="line">    SysUser sysUser = validate(loginCode, password);</span><br><span class="line">   <span class="comment">/*......多余代码省略......*/</span></span><br><span class="line">    <span class="keyword">return</span> result;</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line"><span class="meta">@LoginErrorLog</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> SysUser <span class="title">validate</span><span class="params">(String loginCode, String password)</span> </span>&#123;</span><br><span class="line">    <span class="comment">/*......多余代码省略......*/</span></span><br><span class="line">    <span class="keyword">return</span> sysUser;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>由于三端登录时，校验用户名密码等信息与实际登录终端处于不同的步骤，所以我定义了两个切点分别指向的是实际登录方法与用户合法性校验的方法，采用的是注解的方式。<br>但由于企业端不属于三端登录，所以之前的代码结构是login()方法中嵌套了vaildate()方法，及以上代码块中的代码。<br>之后再测试时发现vaildate()方法的注解失效了。</p>
-          <!--noindex-->
-          
-            <div class="post-button text-center">
-              <a class="btn" href="/2018/12/03/Spring AOP 嵌套使用时内部方法注解失效问题/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://skywaterliu.github.io/2018/11/04/CentOS-7 安装Oracle/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="你丶一顾倾城">
-      <meta itemprop="description" content="你愿意当一根傻傻的韭菜吗">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="安之一隅">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2018/11/04/CentOS-7 安装Oracle/" class="post-title-link" itemprop="url">CentOS-7 安装Oracle</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2018-11-04 08:33:00" itemprop="dateCreated datePublished" datetime="2018-11-04T08:33:00+08:00">2018-11-04</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2019-09-04 15:14:51" itemprop="dateModified" datetime="2019-09-04T15:14:51+08:00">2019-09-04</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Oracle/" itemprop="url" rel="index"><span itemprop="name">Oracle</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <blockquote>
-<p>由于客户生产环境Oracle需要做交叉备份及归档备份，且自己Oracle水平又不高，不敢直接在生产环境动手。但公司的集成环境也有很多项目要跑，所以干脆自己虚拟机装一个测。因为虚拟机已有装好的ubuntu，前两天就直接在ubuntu上装了。但是中间遇到了不小的阻碍，主要是某些依赖拉不到，而ubuntu的依赖安装又和yum冲突，所以昨天决定直接不用ubuntu，改用CentOS-7，总算是顺利完成了。详细过程记录如下。</p>
-</blockquote>
-<!-- toc -->
-
-<ul>
-<li><a href="#安装jdk18">安装JDK1.8</a><ul>
-<li><a href="#删除预装的jdk">删除预装的jdk</a></li>
-<li><a href="#下载jdk">下载jdk</a></li>
-<li><a href="#配置环境变量">配置环境变量</a></li>
-<li><a href="#检查jdk是否生效">检查jdk是否生效</a></li>
-</ul>
-</li>
-<li><a href="#通过yum快速安装oracle依赖">通过yum快速安装Oracle依赖</a></li>
-<li><a href="#系统中的参数设置">系统中的参数设置</a><ul>
-<li><a href="#修改etcsysctlconf">修改/etc/sysctl.conf</a></li>
-<li><a href="#加载内核参数">加载内核参数</a></li>
-<li><a href="#关闭防火墙">关闭防火墙</a></li>
-<li><a href="#关闭selinux需重启生效">关闭SELINUX（需重启生效）</a></li>
-</ul>
-</li>
-<li><a href="#配置oracle系统配置文件授权">配置oracle系统配置文件&amp;授权</a></li>
-<li><a href="#创建oracle安装的目录授权">创建oracle安装的目录&amp;授权</a></li>
-<li><a href="#配置用户环境上传安装包">配置用户环境&amp;上传安装包</a><ul>
-<li><a href="#为oracle用户添加一些必要的环境">为oracle用户添加一些必要的环境</a></li>
-<li><a href="#上传">上传</a></li>
-<li><a href="#解压">解压</a></li>
-<li><a href="#检查文件夹权限root操作">检查文件夹权限（root操作）</a></li>
-</ul>
-</li>
-<li><a href="#安装数据库">安装数据库</a><ul>
-<li><a href="#配置db_installrsp">配置db_install.rsp</a></li>
-<li><a href="#执行静默安装">执行静默安装</a></li>
-</ul>
-</li>
-<li><a href="#测试连接">测试连接</a></li>
-</ul>
-<!-- tocstop -->
-          <!--noindex-->
-          
-            <div class="post-button text-center">
-              <a class="btn" href="/2018/11/04/CentOS-7 安装Oracle/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
+  <nav class="pagination">
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
+  </nav>
+
 
 
           </div>
@@ -2042,7 +2410,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">8</span>
+                    <span class="site-state-item-count">13</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -2079,7 +2447,11 @@
                     
                       
                     
-                    <span class="site-state-item-count">10</span>
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">12</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
@@ -2112,7 +2484,9 @@
                     
                       
                     
-                    <span class="site-state-item-count">8</span>
+                      
+                    
+                    <span class="site-state-item-count">9</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
@@ -2191,7 +2565,7 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
   <span class="with-love" id="animate">
     <i class="fa fa-user"></i>
   </span>
@@ -2257,6 +2631,8 @@
 
 
 
+  
+
 
 
   
@@ -2285,6 +2661,9 @@
 
   
   <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/fancybox/source/jquery.fancybox.pack.js"></script>
 
 
   
